@@ -87,3 +87,28 @@ async function checkWebsite(url) {
       return 'DOWN';
     }
   }
+
+async function checkWebsite(url) {
+    try {
+      const response = await axios.get(url);
+      return response.status === 200 ? 'UP' : 'DOWN';
+    } catch (error) {
+      return 'DOWN';
+    }
+  }
+  
+cron.schedule('* * * * *', async () => {
+  const servers = await Server.find();  
+  
+  for (let server of servers) {
+    const status = await checkWebsite(server.url);  
+    server.value = status;  
+    await server.save();
+    const log = new Log({
+      server: server._id,
+      status: status,
+      url: server.url
+    });
+    await log.save();
+  }
+});
