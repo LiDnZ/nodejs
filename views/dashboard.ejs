@@ -1,0 +1,12 @@
+<h2>Bienvenue <%= user.email %></h2>
+
+<table>
+    <tr><th>Nom</th><th>IP</th><th>Statut</th></tr>
+    <% machines.forEach(machine => { %>
+        <tr>
+            <td><%= machine.nom %></td>
+            <td><%= machine.url %></td>
+            <td><%= machine.value %></td>
+        </tr>
+    <% }); %>
+</table>
